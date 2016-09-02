@@ -1,4 +1,4 @@
-[logo]: http://michaelcyau.com/vclamp/img/demo.png "ClampJS"
+![ClampJS](http://michaelcyau.com/vclamp/img/demo.png)
 # ClampJS
 
 ### What is this?
