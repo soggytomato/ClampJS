@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [Introduction](##What-is-this)
+- [Introduction](#What-is-this)
 Usage
 Examples
 Developer Notes
@@ -11,7 +11,7 @@ Acknowledgements
 
 (#intro)Hello there! Whether you're a student, a professor, or just a curious passerby, I hope this guide will come in handy. Having some background in electrophysiology will help of course, but feel free to read through nonetheless - or skip to the developer notes if you are more interested in my thoughts on the project as whole. 
 
-## What is this?
+# What is this?
 
 This is a voltage clamp simulator. It replicates one of the most useful experimental techniques developed in the late 1940s to study excitable biological membranes. This technique was most famously used to construct the Hodgkin-Huxley model, which is fundamental to our understanding of action potential propagation in neurons. 
 
