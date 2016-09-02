@@ -1,3 +1,4 @@
+[logo]: http://michaelcyau.com/vclamp/img/demo.png "ClampJS"
 # ClampJS
 
 ### What is this?
