@@ -1,17 +1,17 @@
 # ClampJS
 
-## Table of Contents
+### Table of Contents
 
 - [Introduction](#what-is-this)
-Usage
-Examples
-Developer Notes
-Future Directions
-Acknowledgements
+- [Usage](#usage)
+- [Examples](#creating-a-simple-experiment)
+- [Developer Notes](#developer-notes)
+- [Future Directions](#future-directions)
+- [Acknowledgements](#acknowledgements)
 
 Hello there! Whether you're a student, a professor, or just a curious passerby, I hope this guide will come in handy. Having some background in electrophysiology will help of course, but feel free to read through nonetheless - or skip to the developer notes if you are more interested in my thoughts on the project as whole. 
 
-## What is this?
+### What is this?
 
 This is a voltage clamp simulator. It replicates one of the most useful experimental techniques developed in the late 1940s to study excitable biological membranes. This technique was most famously used to construct the Hodgkin-Huxley model, which is fundamental to our understanding of action potential propagation in neurons. 
 
@@ -19,7 +19,7 @@ The purpose of a voltage clamp is to control the voltage across a cell membrane 
 
 Early experiments involving the squid giant axon allowed us to observe the behaviour of macroscopic current - the summation of ion flow through entire populations of channels between the inner and other compartments of a cell. It was found that this type of current can be modeled using a generalized equation, such as that seen below for potassium current from a tetrametric voltage-gated delayed-rectifier (Fig 1): 
 
-
+![alt text](img/fig1.svg "Logo Title Text 1")
 
 Here, several variables dictate the behaviour of these channels observed at the macroscropic scale, including maximum conductance (g DR), opening (α) and closing (β) rate constants, a time constant (τ), membrane voltage (Vm), and Nernst potential (EDR). The entire system is treated as deterministic, or responding predictably over time. However, it is worth noting that from the above list we only really have control over two parameters: the membrane voltage and the Nernst (reversal) potential. 
 
