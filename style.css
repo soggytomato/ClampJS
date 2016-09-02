@@ -1,0 +1,133 @@
+body {
+	background-color:	#d0e4fe;
+	font-family: 		monospace;
+	font-size: 			14px;
+	width:				1280px;
+	margin-left:		auto;
+	margin-right:		auto;
+	background-color:	#d0e4fe;
+}
+
+h2 {
+	text-align:			center;
+}
+
+p {
+	text-align:			center;
+}
+
+p.info {
+	font-size:			10px;
+}
+
+div.container {
+	width:				1280px;
+	height:				650px;
+	display:			flex;
+	margin-left:		auto;
+	margin-right:		auto;
+	position:			relative;
+	background-color:	#dddddd;
+}
+
+div.container.protocol {
+	width:				1280px;
+	height:				300px;
+	display:			flex;
+	margin-left:		auto;
+	margin-right:		auto;
+	position:			relative;
+	background-color:	#bbbbbb;
+}
+
+div.yAxisControls {
+	width:				30px;
+}
+
+div.canvases {
+	width:				800px;
+	position:			relative;
+}
+
+div.spacer {
+	width:				200px;
+	margin-left:		10px;
+	background-color:	#ddbbbb;
+}
+
+div.options {
+	flex-grow:			1;
+	display:			table;
+	text-align:			left;
+}
+
+div.row {
+	display:			table-row;
+	height:				25px;
+	width:				100%;
+}
+
+div.row.hud {
+	height:				15px;
+}
+
+div.column.label {
+	display:			table-cell;
+	width:				50px;
+	background-color:	#bbddbb;	
+}
+
+div.column.input {
+	display:			table-cell;
+	width:				70px;
+	background-color:	#bbbbdd;
+}
+
+div.column.units {
+	display:			table-cell;
+	width:				60px;
+	background-color:	#ddddbb;
+}
+
+div.column.hudValue {
+	display:			table-cell;
+	width:				80px;
+	background-color:	#bbdddd;
+}
+
+input.textbox {
+	height:				15px;
+	width:				60px;
+	font-family:		monospace;
+}
+
+button {
+	font-family:		monospace;
+	font-size:			11px;
+}
+
+button.scaling {
+	width:				25px;
+	height:				25px;
+}
+
+div.protocol {
+	display:			table-cell; 
+	text-align:			left; 
+}
+
+div.protocol.category {
+	width:				80px;
+}
+
+div.protocol.textbox {
+	width:				70px;
+}
+
+div.protocol.units {
+	width:				50px;
+}
+
+div.protocol.checkbox {
+	width:				100px;
+}

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<!-- <link rel="stylesheet" href="style.css"> -->
+		<title>ClampJS</title>
+
+		<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+		<link 	href='https://fonts.googleapis.com/css?family=Lato:100,300,400' 
+				rel='stylesheet' 
+				type='text/css'>
+	</head>
+
+	<body style="background-color:#ffffff">
+
+		<div class="container" style="height:650px; margin-top:30px; width: 1230px">
+			<div class="row">
+				<div class="col-lg-1 well" style="height:600px; width:80px">
+					<button class="btn btn-default" id="yAxisMinus" onclick="yAxisMinus();" style="width:40px"><small>Y-</small></button> 
+					<br><br>
+					<button class="btn btn-default" id="yAxisPlus" onclick="yAxisPlus();" style="width:40px"><small>Y+</small></1button>
+				</div>
+				<div class="col-lg-8 well" style="margin-left:30px; height:600px; width:860px">
+					<canvas id="axis" width="800" height="530" style="	position: 			absolute;
+																		left: 				0px;
+																		top: 				0px;
+																		z-index: 			1;
+																		background-color: 	#fafafa;
+																		margin-top:			30px;
+																		margin-left:		30px;">
+						Canvas not supported; please update your browser.
+					</canvas>
+
+					<canvas id="trace" width="800" height="500" style="	position: 			absolute;
+																		left: 				0px;
+																		top: 				0px;
+																		z-index: 			2;
+																		margin-top:			30px;
+																		margin-left:		30px;">
+						Canvas not supported; please update your browser.
+					</canvas>
+				</div>
+				<div class="col-lg-3" style="margin-left:30px; width:230px">
+					<div class="row well" style="height:170px">
+						<button class="btn btn-success" id="startStopButton" onclick="start();" style="width:45px"><span class="glyphicon glyphicon-play"></span></button>
+						<button class="btn btn-danger" style="width:45px" disabled><span class="glyphicon glyphicon-record"></span></button> 
+						<button class="btn btn-warning" id="restartButton" onclick="restart();" style="width:45px" ><span class="glyphicon glyphicon-repeat"></span></button> 
+						<button class="btn btn-primary" data-toggle="modal" data-target="#conditions" style="width:45px"><span class="glyphicon glyphicon-cog"></span></button> 
+						<hr>
+
+						<div class="table-responsive">
+							<table class="table table-striped" style="vertical-align:middle">
+								<tbody valign="center">
+									<tr>
+										<td width="50%" style="vertical-align:middle"><input class="form-control" id="Vm" type="text" value="-80" onkeypress="enterStepVoltage(event)" style="text-align:right"></td>
+										<td width="20%" style="vertical-align:middle">mV</td>
+										<td width="30%" style="vertical-align:middle"><button class="btn btn-default btn-sm" id="stepButton" onclick="stepVoltage();">Step</button></td>
+									</tr>
+									<tr>
+										
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div class="row well" style="height:410px">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#home" data-toggle="tab" aria-expanded="true"><small>Stats</small></a></li>
+							<li class=""><a href="#K" data-toggle="tab" aria-expanded="false"><small>State Tracker</small></a></li>
+						</ul>
+						<div id="myTabContent" class="tab-content" style="height:280px">
+							<div class="tab-pane active in" id="home">
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<tbody>
+											<tr>
+												<th></th>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<th>V<sub>m</sub></th>
+												<td><span id="VmDisplay">-80</span></td>
+												<td>mV</td>
+											</tr>
+											<tr>
+												<th>E<sub>K</sub></th>
+												<td><span id="EK">0</span></td>
+												<td>mV</td>
+											</tr>
+											<tr>
+												<th>E<sub>Na</sub></th>
+												<td><span id="ENa">0</span></td>
+												<td>mV</td>
+											</tr>
+											<tr>
+												<th>dT</th>
+												<td><span id="dT">0</span></td>
+												<td>ms</td>
+											</tr>
+											<tr>
+												<th>&#945;<sub>n</sub></th>
+												<td><span id="alphan">0</span></td>
+												<td>s<sup>-1</sup></td>
+											</tr>
+											<tr>
+												<th>&#946;<sub>n</sub></th>
+												<td><span id="betan">0</span></td>
+												<td>s<sup>-1</sup></td>
+											</tr>
+											<tr>
+												<th>&#945;<sub>m</sub></th>
+												<td><span id="alpham">0</span></td>
+												<td>s<sup>-1</sup></td>
+											</tr>
+											<tr>
+												<th>&#946;<sub>m</sub></th>
+												<td><span id="betam">0</span></td>
+												<td>s<sup>-1</sup></td>
+											</tr>
+											<tr>
+												<th>&#945;<sub>h</sub></th>
+												<td><span id="alphah">0</span></td>
+												<td>s<sup>-1</sup></td>
+											</tr>
+											<tr>
+												<th>&#946;<sub>h</sub></th>
+												<td><span id="betah">0</span></td>
+												<td>s<sup>-1</sup></td>
+											</tr>
+											<tr>
+												<th>I</th>
+												<td><span id="current">0</span></td>
+												<td><span id="currentUnits">pA</span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="tab-pane" id="K">
+								<div class="table-responsive">
+									<table class="table table-striped">
+										<tbody>
+											<tr>
+												<th></th>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<th width="30%">K<sub>C1</sub></td>
+												<td width="70%"><span id="KC1">0</span></td>
+											</tr>
+											<tr>
+												<th>K<sub>C2</sub></td>
+												<td><span id="KC2">0</span></td>
+											</tr>
+											<tr>
+												<th>K<sub>C3</sub></td>
+												<td><span id="KC3">0</span></td>
+											</tr>
+											<tr>
+												<th>K<sub>C4</sub></td>
+												<td><span id="KC4">0</span></td>
+											</tr>
+											<tr>
+												<th>K<sub>O</sub></td>
+												<td><span id="KO">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>C1</sub></td>
+												<td><span id="NaC1">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>C2</sub></td>
+												<td><span id="NaC2">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>C3</sub></td>
+												<td><span id="NaC3">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>O</sub></td>
+												<td><span id="NaO">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>I1</sub></td>
+												<td><span id="NaI1">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>I2</sub></td>
+												<td><span id="NaI2">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>I3</sub></td>
+												<td><span id="NaI3">0</span></td>
+											</tr>
+											<tr>
+												<th>Na<sub>I4</sub></td>
+												<td><span id="NaI4">0</span></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="container" style="margin-top:30px; width: 1230px; margin-bottom: 300px; font-family: 'Lato', serif; font-weight: 400;">
+			<div class="row">
+				<div class="doc col-sm-8">
+					<hr>
+					<h2>Documentation</h2>
+					<br>
+					<h4>Table of Contents</h4>
+					<ul>
+						<li><a href="#intro">Introduction</a></li>
+						<li><a href="#usage">Usage</a></li>
+						<li><a href="#experiment">Examples</a></li>
+						<li><a href="#devnotes">Developer Notes</a></li>
+						<li><a href="#future">Future Directions</a></li>
+						<li><a href="#acknowledgements">Acknowledgements</a></li>
+					</ul>
+					Hello there! Whether you're a student, a professor, or just a curious passerby, I hope this guide will come in handy. Having some background in 
+					<a href="https://en.wikipedia.org/wiki/Electrophysiology">electrophysiology</a> will help of course, but feel free to read through nonetheless - or skip to the 
+					<a href="#devnotes">developer notes</a> if you are more interested in my thoughts on the project as whole.
+					<br><br>
+					<h4 id="intro">What is this?</h4>
+					This is a <a href="https://en.wikipedia.org/wiki/Voltage_clamp">voltage clamp</a> simulator. It replicates one of the most useful experimental techniques developed in the late 1940s 
+					to study <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1484164/">excitable biological membranes</a>. This technique was most famously used to construct the 
+					<a href="https://en.wikipedia.org/wiki/Hodgkin%E2%80%93Huxley_model">Hodgkin-Huxley model</a>, which is fundamental to our understanding of 
+					<a href="https://en.wikipedia.org/wiki/Action_potential">action potential</a> propagation in neurons.
+					<br><br>
+					The purpose of a voltage clamp is to control the <a href="https://en.wikipedia.org/wiki/Membrane_potential">voltage across a cell membrane</a> while 
+					simultaneously recording the movement of charged ions though different types of <a href="https://en.wikipedia.org/wiki/Ion_channel">ion channels</a>. Actual experiments require 
+					expensive equipment and trained personnel, but we can make use of simulations to give us a basic understanding of the technique and what can be gained from it. 
+					<br><br>
+					Early experiments involving 
+					the <a href="https://en.wikipedia.org/wiki/Squid_giant_axon">squid giant axon</a> allowed us to observe the behaviour of <i>macroscopic current</i> - the summation of ion flow through 
+					entire populations of channels between the inner and other compartments of a cell. It was found that this type of current can be modeled using a generalized equation, such as that 
+					seen below for potassium current from a <a href="https://en.wikipedia.org/wiki/Voltage-gated_potassium_channel">tetrametric voltage-gated delayed-rectifier</a> (Fig 1):
+					<br><br>
+					<div style="text-align: center"><img src="img/fig1.svg"></div>
+					<br>
+					Here, several variables dictate the behaviour of these channels observed at the macroscropic scale, including maximum conductance (<span style="text-decoration: overline">g</span>
+					<sub>DR</sub>), opening (&alpha;) and closing (&beta;) rate constants, a time constant (&tau;), membrane voltage (V<sub>m</sub>), and Nernst potential (E<sub>DR</sub>). The entire 
+					system is treated as <i>deterministic</i>, or responding predictably over time. However, it is worth noting that from the above list we only really have control over two 
+					parameters: the membrane voltage and the Nernst (reversal) potential.
+					<br><br>
+					Ion channels can also be modeled using a <a href="https://en.wikipedia.org/wiki/Stochastic">stochastic</a> approach. This was my choice for the simulator. Since 
+					we know that any single channel may transition between one of many closed, non-conducting states and an open, conducting state, they can be reduced to continuous-time discrete-state 
+					<a href="https://en.wikipedia.org/wiki/Continuous-time_Markov_chain">Markov chains</a>, under the two assumptions that these channels 1) are memoryless, and 2) operate independently. 
+					Armed with empirically determined formulae for opening and closing rate constants, we can use any pseudo-random number generator to closely simulate a channel's 
+					kinetic scheme, as shown below (again for a voltage-gated K<sup>+</sup> channel) (Fig 2):
+					<br><br>
+					<div style="text-align: center"><img src="img/fig2.svg"></div>
+					<br>
+					For any single channel, n<sub>0-3</sub> represent closed states, and n<sub>4</sub> the open state. By closely approximating the probability of each of these transitions, 
+					we can now simulate each channel individually rather than as a part of a population. For a more in-depth look at this approach, see 
+					<a href="https://www.somasimple.com/pdf_files/mino_rube_white_02.pdf">this paper by Mino et al</a>.
+					<br><br>
+					<h4 id="usage">Usage</h4>
+					Fortunately, Hodgkin and Huxley's <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1392413/pdf/jphysiol01442-0106.pdf">seminal experiments</a> have provided us with some very 
+					useful equations for determining rate constants for both potassium and sodium channels found in the squid giant axon. These are the only two channels I have included  
+					for you to play around with, but it should be noted that given sufficient experimental data, any simple channel could be implemented.
+					<br><br>
+					Starting with the left module, we have two buttons, labeled 'Y-' and 'Y+', for zooming <i>out</i> and <i>in</i>, respectively, along the y-axis. The scale of electrical current 
+					will also change, from femto- up to nano- amperes.
+					<br><br>
+					The middle module contains the 'recording'. Time is located along the x-axis, and the current will 'move' from left to right as you perform a recording. At about 80% of the way, 
+					the entire trace will start shifting, in order to maintain 'head' of the trace in the same x-position. 
+					<br><br>
+					In the upper-right module we have the controls (and associated hotkeys):
+					<br>
+					<ul>
+						<li><b>Play/Pause [P]:</b> Starts or stops the experiment.</li>
+						<li><b>Record:</b> Not yet implemented. Will allow experimental data to be saved.</li>
+						<li><b>Reset [R]:</b> Restores default settings and clears the experiment.</li>
+						<li><b>Settings [S]:</b> Opens up the configuration menu:</li>
+						<li style="margin-left:20pt"><b>dT</b> (Real-time frame duration) - the amount of 'simulated time' spent on one frame. Units are in microseconds. Note that because the framerate is set to 
+							(and capped at) 60 frames per second, the default setting (100 &#956;s) will cause the experiment to run approximately 167 times slower than real-time, although this will of course depend 
+							on the speed of your machine and the desired number of channels you wish to simulate. If you would like to perform an experiment in real-time, simply set this value to 
+							16,666 &#956;s - however, note that this will significantly increase computational demand and, in my opinion, will not yield very interesting results.</li>
+						<li style="margin-left:20pt"><b>N<sub>K</sub>/N<sub>Na</sub></b> (Number of potassium/sodium channels) - recommended between 0 to 50,000, or more if your computer can handle it.</li>
+						<li style="margin-left:20pt"><b>&gamma;<sub>K</sub>/&gamma;<sub>Na</sub></b> (Potassium/sodium single-channel conductance) - electrical conductance (R<sup>-1</sup>) of a single potassium 
+							or sodium channel. Units are in picosiemens.</li>
+						<li style="margin-left:20pt"><b>&#91;K<sup>+</sup>/Na<sup>+</sup>&#93;<sub>o/i</sub></b> (Extracellular/intracellular potassium/sodium concentration) - determines the reversal potential. 
+							Units are in millimolar. By default, these have been set to the amounts used in Hodgkin and Huxley's squid giant axon experiments.</li>
+					</ul>
+					<p style="margin-left:20pt">In order to edit the settings, click the <b>Edit</b> button. When you are finished, click <b>Done</b>. The experiment cannot be started until you click 
+						<b>Done</b>. Likewise, you cannot change the settings if the experiment has been started. Some settings may be edited if the recording is paused, however, in order to enable all settings 
+						you must reset the experiment.</p>
+
+					Below the controls is the voltage setter. By default, the membrane holding voltage has been set to -80 mV. To change it, enter in a new value and click <b>Step</b>, or press enter. There is 
+					no clamp delay; the changes will be reflected immediately. Note that this can be done whether the experiment is in progress or if it has been paused. In the latter case, when the experiment 
+					is resumed, the simulator will step to whichever voltage was most recently set.
+					<br><br>
+					In the lower-right module you will find some other useful information in two tabs. In the <b>Stats</b> tab we have:
+					<ul>
+						<li><b>V<sub>m</sub></b> - Transmembrane voltage (mV).</li>
+						<li><b>E<sub>K/Na</sub></b> - Equilibrium potential for potassium or sodium (mV). Depends (only) on the intra/extracellular ion concentration.</li>
+						<li><b>dT</b> - Elapsed time for the experiment (ms).</li>
+						<li><b>&alpha;/&beta;<sub>n/m/h</sub></b> - Opening and closing rate constants for potassium and sodium channels, using Hodgkin &amp; Huxley's naming conventions (s<sup>-1</sup>).</li>
+						<li><b>I</b> - Measured current (pA).</li>
+					</ul>
+					The <b>State Tracker</b> contains a list of all possible channel states (for both potassium and sodium). In general, subscripts <b>O</b>, <b>C</b>, and <b>I</b> denote the open, closed, and 
+					inactivated states, respectively.
+					<br><br>
+					<h4 id="experiment">Running a simple experiment</h4>
+					While nothing prevents you from mixing the two channels together in your experiment, I would highly encourage trying each one individually to see how they behave (which they should, very 
+					predictably, as in the literature). With a time step (by default) that is much, much slower than real-time, you will be able to see several interesting things - particularly the 
+					kinetics of channel opening/closing.
+					<br><br>
+					One of the benefits of modeling ion channels as stochastic processes is the ability to simulate single-channel (or very few, as in single-digit) activity. At certain voltages, the 'flickering' 
+					behaviour seen in many channels can be recreated. The following experimental trace was recorded from 4 potassium channels held at -20 mV (Fig 3):
+					<br><br>
+					<div style="text-align: center"><img src="img/fig5.png"></div>
+					<br>
+					From above, we can see that 1) each channel contributes a fixed amount to the overall membrane conductance, 2) transitions between closed and open states are, for all intents and purposes, 
+					instantaneous, and 3) if you observed the state tracker during the experiment you would see that the channels conduct only in their open state and not in any of their closed states.
+					<br><br>
+					Let's say you wanted to recreate something more along the lines of what a <i>deterministic</i> equation would produce: current that follows clear exponential growth as in Figure 1 above. All you 
+					have to do is increase the channel number. Unless you are running the simulation on a potato, you should be able to achieve something that looks very close to the 
+					deterministic case. The following traces were recorded from 1, 10, 100, and 1000 potassium channels held at -80 mV and then stepped to +40 mV (Fig 4):
+					<br><br>
+					<div style="text-align: center"><img src="img/fig3.png"></div>
+					<br>
+					The same can be done with sodium channels. The following trace (with voltages directly labeled) was recorded from 16,000 channels (note that the frame duration has been slowed to 20 &#956;s) 
+					(Fig 5):
+					<br><br>
+					<div style="text-align: center"><img src="img/fig4.png"></div>
+					<br>
+					Two important things to note from above: 1) by slowing down the frame duration even further (now over 800 times slower than real-time), we can very clearly see activation <i>and</i> inactivation 
+					kinetics as described in Hodgkin and Huxley's equations, and 2) the reversal potential for sodium (~55 mV) and its role on the difference in magnitude (and direction) of the driving 
+					force between the two step voltages (+40 and +70 mV).
+					<br><br>
+					<h4 id="devnotes">Developer notes</h4>
+					The major drawback of stochastic ion channel simulations is speed. Initially, the easiest way to mimic individual channels is a brute-force approach: Since the rate 
+					constant (s<sup>-1</sup>) represents the expected number of transitions (forward or reverse) per second for a single channel, given some finite time step (here we see the purpose of 
+					our <i>real-time frame duration</i> parameter from above) we can calculate the probability that a channel flips from one state to another by a simple multiplication. Assuming uniformly distributed 
+					pseudo-random numbers, this method will allow us to effectively simulate any number of channels as long as the time step is sufficiently small (such that the transition probability per unit time 
+					is much less than 1). However, this method is very slow - although the time complexity is only O(n), the algorithm simply does not scale well when we want to have very large numbers of channels 
+					(>> 1m), which is not uncommon in certain biological systems (such as the <a href="https://en.wikipedia.org/wiki/African_clawed_frog"><i>Xenopus</i></a> oocyte).
+					<br><br>
+					A more efficient method, known as the CNT algorithm, was developed by Gillespie in 1977. Originally used to simulate coupled chemical reactions, the algorithm was later adapted for modeling 
+					membrane activity in neurons (also described in-depth in the above linked paper by Mino <i>et al.</i>). In contrast to the brute-force method, this approach uses a probability density function to 
+					calculate the <i>time until the next transition</i>. Essentially, the algorithm can be broken down into two steps: 1) calculating the time that will elapse until the next transition and 2) updating the 
+					number of channels in each state. Instead of deciding whether to change state for each of <i>n</i> channels at every time step, we perform transitions one at a time and calculate the 
+					appropriate waiting time on-the-fly. But here's the important part: although our upper-bound is still O(n) (the case where every single channel switches state in a single frame), 
+					the <i>expected</i> runtime is much less, because the number of transitions occurring between each time step is usually <i>much</i> less than <i>n</i>. However, it should be noted that 
+					delays can still be expected during very large voltage steps, when large numbers of channels open or close in a short period of time. See <a href="http://www.scholarpedia.org/article/Stochastic_models_of_ion_channel_gating">
+					here</a> for a more detailed discussion.
+					<br><br>
+					I wrote the simulation in javascript, mostly for accessibility/compatibility (although it does require you to use a browser supporting HTML5). No external frameworks were used - I considered 
+					using some sort of charting library, but most of them seemed a bit too fancy/heavy for the task (I just needed to draw a one-pixel width line on a graph). For now, the basic canvas drawing 
+					tools suffice and replicate what you would see in real software such as Clampex.
+					<br><br>
+					<h4 id="future">Future directions</h4>
+					In its current state, the simulator works and can be used to do several proof-of-concept demonstrations. I haven't found the time add all the functions of a real voltage clamp (in particular, 
+					the ability to perform <a href="https://en.wikipedia.org/wiki/Electrophysiology#Current_clamp">current clamp</a>). Also, you can probably see that there is a 'record' button but no recording 
+					feature, but there are means to add this, since the data is in fact saved (albeit currently in a simple dynamic array - probably not the best choice). 
+					<br><br>
+					As a disclaimer, this was a side project that I worked on in my spare time and is therefore relatively 
+					unmaintained and will almost certainly contain bugs. However, if you are an instructor interested in seeing this become a meaningful learning tool, 
+					know that I'd be happy to expand the functionality if you wish to use it for teaching. My contact info can easily be found on my <a href="http://michaelcyau.com">main page</a>, so don't 
+					hesitate to get in touch with me. Also, I am by no means an expert in the field, so all feedback is encouraged, and most definitely appreciated!
+					<br><br>
+					<h4 id="acknowledgements">Acknowledgments</h4>
+					I owe everything I've learned about electrophysiology over the years to my lab supervisors <a href="http://www.kuratalab.com/">Harley Kurata</a> and <a href="http://theplesslab.com/"> 
+					Stephan Pless</a>, and my neurophysiology profressor <a href="http://crg.lsi.ubc.ca/primary-members/kehl-lab/">Steve Kehl</a>. Many thanks for their support!
+					<br><br>
+					The interface uses the <a href="https://bootswatch.com/lumen/">Lumen</a> theme from Bootswatch.
+					<br><br>
+				</div>
+			</div>
+		</div>
+		
+
+	<div id="conditions" class="modal" role="dialog">
+		<div class="modal-dialog modal-md">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Settings</h4>
+				</div>
+
+				<div class="modal-body" style="height:300px">
+					<div class="table-responsive">
+						<table class="table table-striped" style="vertical-align:middle">
+							<tbody valign="center">
+								<tr>
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Real-Time Frame Duration">dT</span></th>
+									<td width="20%" style="vertical-align:middle"><input class="form-control" id="dTfield" type="text" value="100" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle">&#956;s</td>
+
+									<td width="5%"></td>
+
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Extracellular Potassium Concentration">&#91;K<sup>+</sup>&#93;<sub>o</sub></span></th>
+									<td width="20%" style="vertical-align:middle"><input class="form-control" id="KconcOut" type="text" value="20" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle">mM</td>
+								</tr>
+
+								<tr>
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Number of Potassium Channels">N<sub>K</sub></span></th>
+									<td width="10%" style="vertical-align:middle"><input class="form-control" id="NK" type="text" value="0" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle"></td>
+
+									<td width="5%"></td>
+
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Intracellular Potassium Concentration">&#91;K<sup>+</sup>&#93;<sub>i</sub></span></th>
+									<td width="10%" style="vertical-align:middle"><input class="form-control" id="KconcIn" type="text" value="400" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle">mM</td>
+								</tr>
+
+								<tr>
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Number of Sodium Channels">N<sub>Na</sub></span></th>
+									<td width="10%" style="vertical-align:middle"><input class="form-control" id="NNa" type="text" value="0" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle"></td>
+
+									<td width="5%"></td>
+
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Extracellular Sodium Concentration">&#91;Na<sup>+</sup>&#93;<sub>o</sub></span></th>
+									<td width="10%" style="vertical-align:middle"><input class="form-control" id="NaconcOut" type="text" value="440" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle">mM</td>
+								</tr>
+
+								<tr>
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Potassium Single-Channel Conductance">&gamma;<sub>K</sub></span></th>
+									<td width="10%" style="vertical-align:middle"><input class="form-control" id="gammaK" type="text" value="20" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle">pS</td>
+
+									<td width="5%"></td>
+
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Intracellular Sodium Concentration">&#91;Na<sup>+</sup>&#93;<sub>i</sub></span></th>
+									<td width="10%" style="vertical-align:middle"><input class="form-control" id="NaconcIn" type="text" value="50" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle">mM</td>
+								</tr>
+
+								<tr>
+									<th width="10%" style="vertical-align:middle"><span data-toggle="tooltip" data-placement="top" data-original-title="Sodium Single-Channel Conductance">&gamma;<sub>Na</sub></span></th>
+									<td width="10%" style="vertical-align:middle"><input class="form-control" id="gammaNa" type="text" value="14" onkeypress="enterDoneSettings(event)" style="text-align:right" disabled></td>
+									<td width="5%" style="vertical-align:middle">pS</td>
+
+									<td width="5%"></td>
+
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-primary" id="editButton" onclick="editSettings();">Edit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+		<div style="text-align:center;">
+			<p class="info"><small>&copy; Michael Yau 2016<br><a href="#top">Top</a> | <a href="http://michaelcyau.com">Home</a></small></p>
+		</div>
+
+		<script src="js/data.js"></script>
+		<script src="js/canvas.js"></script>
+
+    <!-- Bootstrap core JavaScript and IE10 viewport hack-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+    <script>
+		$(document).ready(function(){
+
+		    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+		    $('[data-tooltip="true"]').tooltip({container: 'body'}); 
+		    $('[data-toggle="popover"]').popover(); 
+		});
+
+		window.onkeydown = function (e) {
+		    var code = e.keyCode ? e.keyCode : e.which;
+		    if (code === 83) {
+		        $('#conditions').modal('toggle');
+		    } else if (code === 80) {
+		    	if(!$('#startStopButton').is(':disabled')) { 
+			        $('#startStopButton').trigger('click');
+			    } 
+		    } else if (code === 82) {
+		    	if(!$('#restartButton').is(':disabled')) { 
+			        $('#restartButton').trigger('click');
+			    } 
+		    }
+		};
+	</script>
+
+	</body>
+
+</html>
