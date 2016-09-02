@@ -1,6 +1,5 @@
-![ClampJS](http://michaelcyau.com/vclamp/img/demo.png)
 # ClampJS
-
+![ClampJS](http://michaelcyau.com/vclamp/img/demo.png)
 ### What is this?
 
 This is a voltage clamp simulator. It replicates one of the most useful experimental techniques developed in the late 1940s to study excitable biological membranes. This technique was most famously used to construct the Hodgkin-Huxley model, which is fundamental to our understanding of action potential propagation in neurons. 
